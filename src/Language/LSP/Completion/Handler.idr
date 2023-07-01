@@ -158,30 +158,19 @@ mkCompletionItem w (MkEntry c n ty ar doc) =
         , command             = Nothing -- : Maybe Command
         , data_               = Nothing -- : Maybe JSON
         } in
-  let text = case ar of
-              [] => shortName
-              as => fastConcat
-                      [ "("
-                      , unwords
-                          $ shortName ::
-                            [ "?" ++ fromMaybe (shortName ++ "_arg_" ++ show i) x
-                            | (i,x) <- number as
-                            ]
-                      , ")"
-                      ]
-  in if (isInfixOf w shortName || isInfixOf w longName)
+  if (isInfixOf w shortName || isInfixOf w longName)
     then Just $ case c of
           CurrentNsName =>
             { label      := shortName
-            , insertText := Just text
+            , insertText := Just shortName
             } item
           InNestedNs =>
             { label      := shortName
-            , insertText := Just text
+            , insertText := Just shortName
             } item
           other =>
             { label      := show n
-            , insertText := Just text
+            , insertText := Just (show n)
             } item
       else Nothing
 
